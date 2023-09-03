@@ -12,7 +12,7 @@
     </div>
     <div id="burger-table-rows">
       <div
-        v-for="{ id, nome, carne, pao, opcionais } in burgers"
+        v-for="{ id, nome, carne, pao, opcionais, status } in burgers"
         class="burger-table-row"
         :key="id"
       >
@@ -28,7 +28,14 @@
         <div>
           <select name="status" class="status">
             <option value="">Selecione o status do pedido...</option>
-            <option value=""></option>
+            <option
+              v-for="{ id, tipo } in statusData"
+              :value="tipo"
+              :key="id"
+              :selected="status === tipo"
+            >
+              {{ tipo }}
+            </option>
           </select>
           <button class="delete-btn">Cancelar pedido</button>
         </div>
@@ -44,7 +51,7 @@ export default {
     return {
       burgers: [],
       burger_id: 0,
-      status: [],
+      statusData: [],
     };
   },
   methods: {
@@ -54,9 +61,16 @@ export default {
 
       this.burgers = data;
     },
+    async getStatus() {
+      const req = await fetch("http://localhost:3000/status");
+      const data = await req.json();
+
+      this.statusData = data;
+    },
   },
   mounted() {
     this.getPedidos();
+    this.getStatus();
   },
 };
 </script>
