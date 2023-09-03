@@ -11,20 +11,24 @@
       </div>
     </div>
     <div id="burger-table-rows">
-      <div class="burger-table-row">
-        <div class="order-number">1</div>
-        <div>Gabriel</div>
-        <div>Integral</div>
-        <div>Alcatra</div>
+      <div
+        v-for="{ id, nome, carne, pao, opcionais } in burgers"
+        class="burger-table-row"
+        :key="id"
+      >
+        <div class="order-number">{{ id }}</div>
+        <div>{{ nome }}</div>
+        <div>{{ pao }}</div>
+        <div>{{ carne }}</div>
         <div>
           <ul>
-            <li>Salame</li>
-            <li>Tomate</li>
+            <li v-for="(item, index) in opcionais" :key="index">{{ item }}</li>
           </ul>
         </div>
         <div>
           <select name="status" class="status">
             <option value="">Selecione o status do pedido...</option>
+            <option value=""></option>
           </select>
           <button class="delete-btn">Cancelar pedido</button>
         </div>
@@ -36,6 +40,24 @@
 <script lang="ts">
 export default {
   name: "OrdersDashboard",
+  data() {
+    return {
+      burgers: [],
+      burger_id: 0,
+      status: [],
+    };
+  },
+  methods: {
+    async getPedidos() {
+      const req = await fetch("http://localhost:3000/burgers");
+      const data = await req.json();
+
+      this.burgers = data;
+    },
+  },
+  mounted() {
+    this.getPedidos();
+  },
 };
 </script>
 

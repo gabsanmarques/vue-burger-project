@@ -79,10 +79,13 @@
   ],
   "burgers": [
     {
-      "nome": "",
-      "carne": "",
-      "pao": "",
-      "opcionais": [],
+      "nome": "Gabriel",
+      "carne": "Maminha",
+      "pao": "3 Queijos",
+      "opcionais": [
+        "Bacon",
+        "Cebola roxa"
+      ],
       "status": "Solicitado",
       "id": 1
     }
