@@ -79,29 +79,12 @@
   ],
   "burgers": [
     {
-      "nome": "Gabriel",
-      "carne": "Picanha",
-      "pao": "Italiano Branco",
-      "opcionais": [
-        "Bacon",
-        "Salame",
-        "Cebola roxa",
-        "Cheddar",
-        "Tomate"
-      ],
+      "nome": "",
+      "carne": "",
+      "pao": "",
+      "opcionais": [],
       "status": "Solicitado",
       "id": 1
-    },
-    {
-      "nome": "Pedro",
-      "carne": "Alcatra",
-      "pao": "Italiano Branco",
-      "opcionais": [
-        "Bacon",
-        "Salame"
-      ],
-      "status": "Solicitado",
-      "id": 2
     }
   ]
 }

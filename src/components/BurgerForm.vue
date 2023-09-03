@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Message Component</p>
+    <MessageComponent v-if="!(msg === '')" :msg="msg" />
     <div>
       <form ref="burgerForm" id="burger-form" @submit="createBurger($event)">
         <div class="input-container">
@@ -61,6 +61,8 @@
 </template>
 
 <script lang="ts">
+import MessageComponent from "./MessageComponent.vue";
+
 export default {
   name: "BurgerForm",
   data() {
@@ -79,7 +81,6 @@ export default {
     async getIngredients() {
       const req = await fetch("http://localhost:3000/ingredientes");
       const data = await req.json();
-
       this.breads = data.paes;
       this.patties = data.carnes;
       this.optionalData = data.opcionais;
@@ -94,22 +95,27 @@ export default {
         opcionais: Array.from(this.optional),
         status: "Solicitado",
       };
-
       const dataJson = JSON.stringify(data);
-
-      await fetch("http://localhost:3000/burgers", {
+      const req = await fetch("http://localhost:3000/burgers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: dataJson,
       });
 
-      const form = this.$refs.burgerForm as HTMLFormElement;
-      form.reset();
+      const res = await req.json();
+      this.msg = `Pedido Nº ${res.id} feito com sucesso!`;
+      setTimeout(() => (this.msg = ""), 3000);
+
+      this.name = "";
+      this.patty = "";
+      this.bread = "";
+      this.optional = [];
     },
   },
   mounted() {
     this.getIngredients();
   },
+  components: { MessageComponent },
 };
 </script>
 
