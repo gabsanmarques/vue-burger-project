@@ -2,7 +2,7 @@
   <div>
     <p>Message Component</p>
     <div>
-      <form id="burger-form">
+      <form ref="burgerForm" id="burger-form" @submit="createBurger($event)">
         <div class="input-container">
           <label for="name"> Nome: </label>
           <input
@@ -72,7 +72,6 @@ export default {
       bread: "",
       patty: "",
       optional: [],
-      status: "Solicitado",
       msg: "",
     };
   },
@@ -84,6 +83,28 @@ export default {
       this.breads = data.paes;
       this.patties = data.carnes;
       this.optionalData = data.opcionais;
+    },
+    async createBurger(e: Event) {
+      e.preventDefault();
+
+      const data = {
+        nome: this.name,
+        carne: this.patty,
+        pao: this.bread,
+        opcionais: Array.from(this.optional),
+        status: "Solicitado",
+      };
+
+      const dataJson = JSON.stringify(data);
+
+      await fetch("http://localhost:3000/burgers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: dataJson,
+      });
+
+      const form = this.$refs.burgerForm as HTMLFormElement;
+      form.reset();
     },
   },
   mounted() {
