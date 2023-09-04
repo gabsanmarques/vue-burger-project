@@ -37,7 +37,9 @@
               {{ tipo }}
             </option>
           </select>
-          <button class="delete-btn">Cancelar pedido</button>
+          <button class="delete-btn" @click="deleteBurger(id)">
+            Cancelar pedido
+          </button>
         </div>
       </div>
     </div>
@@ -66,6 +68,16 @@ export default {
       const data = await req.json();
 
       this.statusData = data;
+    },
+    async deleteBurger(id: number) {
+      const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+        method: "DELETE",
+      });
+
+      const res = await req.json();
+      console.log(res);
+
+      this.getPedidos();
     },
   },
   mounted() {
@@ -115,6 +127,7 @@ select {
   padding: 12px 6px;
   margin-right: 12px;
   width: 50%;
+  height: 50px;
 }
 
 .delete-btn {
@@ -126,6 +139,7 @@ select {
   margin: 0 auto;
   cursor: pointer;
   transition: 0.5s;
+  height: 50px;
 }
 
 .delete-btn:hover {
