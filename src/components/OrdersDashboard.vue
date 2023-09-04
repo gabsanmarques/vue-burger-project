@@ -1,5 +1,6 @@
 <template>
   <div id="burger-table">
+    <MessageComponent v-if="msg !== ''" :msg="msg" />
     <div>
       <div id="burger-table-heading">
         <div class="order-id">#:</div>
@@ -51,6 +52,8 @@
 </template>
 
 <script lang="ts">
+import MessageComponent from "./MessageComponent.vue";
+
 export default {
   name: "OrdersDashboard",
   data() {
@@ -58,30 +61,31 @@ export default {
       burgers: [],
       burger_id: 0,
       statusData: [],
+      msg: "",
     };
   },
   methods: {
     async getPedidos() {
       const req = await fetch("http://localhost:3000/burgers");
       const data = await req.json();
-
       this.burgers = data;
     },
     async getStatus() {
       const req = await fetch("http://localhost:3000/status");
       const data = await req.json();
-
       this.statusData = data;
     },
     async deleteBurger(id: number) {
       const req = await fetch(`http://localhost:3000/burgers/${id}`, {
         method: "DELETE",
       });
-
       const res = await req.json();
       console.log(res);
-
       this.getPedidos();
+      this.msg = `Pedido ${id} cancelado com sucesso!`;
+      setTimeout(() => {
+        this.msg = "";
+      }, 3000);
     },
     async updateBurguer(e: Event, id: number) {
       const target = e.target as HTMLSelectElement;
@@ -94,15 +98,20 @@ export default {
         },
         body: dataJson,
       });
-
       const res = await req.json();
       console.log(res);
+
+      this.msg = `Status do pedido ${id} atualizado com sucesso para "${newStatus}"`;
+      setTimeout(() => {
+        this.msg = "";
+      }, 3000);
     },
   },
   mounted() {
     this.getPedidos();
     this.getStatus();
   },
+  components: { MessageComponent },
 };
 </script>
 
