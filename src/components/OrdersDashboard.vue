@@ -26,7 +26,11 @@
           </ul>
         </div>
         <div>
-          <select name="status" class="status">
+          <select
+            name="status"
+            class="status"
+            @change="updateBurguer($event, id)"
+          >
             <option value="">Selecione o status do pedido...</option>
             <option
               v-for="{ id, tipo } in statusData"
@@ -78,6 +82,21 @@ export default {
       console.log(res);
 
       this.getPedidos();
+    },
+    async updateBurguer(e: Event, id: number) {
+      const target = e.target as HTMLSelectElement;
+      const newStatus = target.value;
+      const dataJson = JSON.stringify({ status: newStatus });
+      const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: dataJson,
+      });
+
+      const res = await req.json();
+      console.log(res);
     },
   },
   mounted() {
