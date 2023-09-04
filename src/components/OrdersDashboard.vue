@@ -54,9 +54,28 @@
 <script lang="ts">
 import MessageComponent from "./MessageComponent.vue";
 
+interface Burger {
+  id: number;
+  nome: string;
+  carne: string;
+  pao: string;
+  opcionais: string[];
+  status: string;
+}
+
+interface Status {
+  id: number;
+  tipo: string;
+}
+
 export default {
   name: "OrdersDashboard",
-  data() {
+  data(): {
+    burgers: Burger[];
+    burger_id: number;
+    statusData: Status[];
+    msg: string;
+  } {
     return {
       burgers: [],
       burger_id: 0,
@@ -65,20 +84,23 @@ export default {
     };
   },
   methods: {
-    async getPedidos() {
-      const req = await fetch("http://localhost:3000/burgers");
+    async getPedidos(): Promise<void> {
+      const req = await fetch("https://burger-api-odgl.onrender.com/burgers");
       const data = await req.json();
       this.burgers = data;
     },
-    async getStatus() {
-      const req = await fetch("http://localhost:3000/status");
+    async getStatus(): Promise<void> {
+      const req = await fetch("https://burger-api-odgl.onrender.com/status");
       const data = await req.json();
       this.statusData = data;
     },
-    async deleteBurger(id: number) {
-      const req = await fetch(`http://localhost:3000/burgers/${id}`, {
-        method: "DELETE",
-      });
+    async deleteBurger(id: number): Promise<void> {
+      const req = await fetch(
+        `https://burger-api-odgl.onrender.com/burgers/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
       const res = await req.json();
       console.log(res);
       this.getPedidos();
@@ -87,17 +109,20 @@ export default {
         this.msg = "";
       }, 3000);
     },
-    async updateBurguer(e: Event, id: number) {
+    async updateBurguer(e: Event, id: number): Promise<void> {
       const target = e.target as HTMLSelectElement;
       const newStatus = target.value;
       const dataJson = JSON.stringify({ status: newStatus });
-      const req = await fetch(`http://localhost:3000/burgers/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: dataJson,
-      });
+      const req = await fetch(
+        `https://burger-api-odgl.onrender.com/burgers/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: dataJson,
+        }
+      );
       const res = await req.json();
       console.log(res);
 
@@ -119,6 +144,7 @@ export default {
 #burger-table {
   max-width: 1200px;
   margin: 0 auto;
+  min-height: 300px;
 }
 
 #burger-table-heading,

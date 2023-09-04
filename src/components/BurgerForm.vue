@@ -79,7 +79,9 @@ export default {
   },
   methods: {
     async getIngredients() {
-      const req = await fetch("http://localhost:3000/ingredientes");
+      const req = await fetch(
+        "https://burger-api-odgl.onrender.com/ingredientes"
+      );
       const data = await req.json();
       this.breads = data.paes;
       this.patties = data.carnes;
@@ -96,7 +98,7 @@ export default {
         status: "Solicitado",
       };
       const dataJson = JSON.stringify(data);
-      const req = await fetch("http://localhost:3000/burgers", {
+      const req = await fetch("https://burger-api-odgl.onrender.com/burgers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: dataJson,
